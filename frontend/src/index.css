@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+
+  /* surfaces */
+  --color-bg: #0b1220;
+  --color-panel: #111c2e;
+  --color-panel-2: #0e1727;
+  --color-raised: #16233a;
+  --color-line: #263449;
+  --color-line-soft: #1b2739;
+
+  /* ink */
+  --color-ink: #e2e8f0;
+  --color-ink-2: #94a3b8;
+  --color-ink-3: #64748b;
+
+  /* brand */
+  --color-teal: #14b8a6;
+  --color-cyan: #38bdf8;
+
+  /* status (reserved: always paired with icon + label) */
+  --color-ok: #34d399;
+  --color-warn: #f59e0b;
+  --color-crit: #ef4444;
+
+  /* chart series (validated against #111c2e) */
+  --color-s1: #3987e5;
+  --color-s2: #d95926;
+  --color-s3: #199e70;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #263449 transparent;
+}
+
+/* recharts text */
+.recharts-text {
+  fill: var(--color-ink-3);
+  font-size: 11px;
+}
+.recharts-cartesian-axis-tick-value {
+  font-variant-numeric: tabular-nums;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 0.4;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgb(239 68 68 / 0.45); }
+  70% { box-shadow: 0 0 0 10px rgb(239 68 68 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(239 68 68 / 0); }
+}
+.pulse-crit {
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-crit { animation: none; }
+}

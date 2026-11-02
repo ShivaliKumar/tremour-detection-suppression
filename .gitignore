@@ -1,0 +1,44 @@
+# ---------- Python ----------
+backend/.venv/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local dashboard settings (COM port, tuned thresholds) - per machine
+backend/settings.json
+
+# ---------- Node / frontend ----------
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+.vite/
+npm-debug.log*
+yarn-error.log*
+
+# ---------- Recorded data (large, possibly personal) ----------
+# Remove these lines if you want to share recordings through the repo.
+datasets/raw/*.csv
+datasets/processed/*.csv
+datasets/exported/*.csv
+datasets/sessions.json
+datasets/labels.json
+
+# ---------- Trained models (regenerate with backend/train_model.py) ----------
+models/*.pkl
+models/model_metadata.json
+
+# ---------- Arduino build output ----------
+firmware/**/build/
+
+# ---------- Editors / OS / misc ----------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.env
+.env.*
