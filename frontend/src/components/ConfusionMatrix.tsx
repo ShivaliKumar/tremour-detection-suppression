@@ -1,5 +1,5 @@
 // Sequential single-hue (blue) ramp: darker = more samples. Rows = actual, columns = predicted.
-const RAMP = ["#16233a", "#184f95", "#1c5cab", "#256abf", "#2a78d6", "#3987e5", "#5598e7", "#6da7ec"];
+const RAMP = ["#f5f4ed", "#f3dcd2", "#efc6b5", "#e8ad96", "#e09479", "#d97757", "#c6613f", "#a94e30"];
 
 export function ConfusionMatrix({ classes, matrix }: { classes: string[]; matrix: number[][] }) {
   const max = Math.max(1, ...matrix.flat());
@@ -37,8 +37,8 @@ export function ConfusionMatrix({ classes, matrix }: { classes: string[]; matrix
                       className="size-16 rounded-md text-center align-middle tabular"
                       style={{ background: RAMP[step], outline: i === j ? "1px solid rgba(226,232,240,0.35)" : undefined }}
                     >
-                      <div className="font-semibold text-white">{v}</div>
-                      <div className="text-[10px] text-white/70">{((v / total) * 100).toFixed(0)}%</div>
+                      <div className="font-semibold text-ink">{v}</div>
+                      <div className="text-[10px] text-ink/60">{((v / total) * 100).toFixed(0)}%</div>
                     </td>
                   );
                 })}

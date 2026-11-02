@@ -45,7 +45,7 @@ export function SessionTable({
             <tr
               key={s.id}
               className={cx(
-                "border-b border-line-soft/60 transition-colors last:border-0 hover:bg-white/[0.02]",
+                "border-b border-line-soft/60 transition-colors last:border-0 hover:bg-ink/[0.02]",
                 selectedId === s.id && "bg-teal/[0.05]",
               )}
             >
@@ -90,7 +90,7 @@ export function SessionTable({
                       )}
                       <a
                         href={`/api/sessions/${s.id}/download`}
-                        className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-ink-2 hover:bg-white/[0.04] hover:text-ink"
+                        className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-ink-2 hover:bg-ink/[0.04] hover:text-ink"
                         aria-label={`Download ${s.file}`}
                       >
                         <Download className="size-4" /> CSV

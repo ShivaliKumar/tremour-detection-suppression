@@ -69,7 +69,7 @@ export default function Overview() {
                 </span>
               }
             >
-              <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+              <div className="h-1.5 overflow-hidden rounded-full bg-ink/[0.05]">
                 <div className="h-full rounded-full bg-s1" style={{ width: `${Math.min(100, ((p?.emg_avg ?? 0) / 4095) * 100)}%` }} />
               </div>
             </MetricCard>
@@ -257,7 +257,7 @@ function DetectionStrip({ rows, windowSeconds }: { rows: Row[]; windowSeconds: n
   const pct = (x: number) => ((x + windowSeconds) / windowSeconds) * 100;
   return (
     <div className="mt-2 pl-12 pr-2">
-      <div className="relative h-3 overflow-hidden rounded-sm bg-white/[0.03]" aria-label="Combined tremor detection over the last 10 seconds">
+      <div className="relative h-3 overflow-hidden rounded-sm bg-ink/[0.03]" aria-label="Combined tremor detection over the last 10 seconds">
         {runs.map((r) => (
           <div
             key={r.from}

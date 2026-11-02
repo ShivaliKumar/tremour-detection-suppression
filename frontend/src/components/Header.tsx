@@ -32,13 +32,13 @@ export function Header({ title, subtitle, onMenu }: { title: string; subtitle: s
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-bg/90 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur">
       <div className="flex min-h-16 flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6 lg:px-8">
-        <button className="-ml-1 rounded-lg p-1.5 text-ink-2 hover:bg-white/5 lg:hidden" onClick={onMenu} aria-label="Open menu">
+        <button className="-ml-1 rounded-lg p-1.5 text-ink-2 hover:bg-ink/5 lg:hidden" onClick={onMenu} aria-label="Open menu">
           <Menu className="size-5" />
         </button>
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg font-semibold tracking-tight text-ink">{title}</h1>
+          <h1 className="truncate font-serif text-[22px] font-medium tracking-tight text-ink">{title}</h1>
           <p className="truncate text-xs text-ink-3">{subtitle}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">

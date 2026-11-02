@@ -6,7 +6,7 @@ const config: Record<SystemState | "BACKEND OFFLINE", { icon: LucideIcon; ring: 
   NORMAL: { icon: CheckCircle2, ring: "border-ok/30", text: "text-ok", bg: "bg-ok/[0.07]", label: "NORMAL" },
   "TREMOR DETECTED": { icon: Activity, ring: "border-crit/50", text: "text-crit", bg: "bg-crit/[0.10]", label: "TREMOR DETECTED" },
   "SENSOR ERROR": { icon: AlertOctagon, ring: "border-warn/40", text: "text-warn", bg: "bg-warn/[0.08]", label: "SENSOR ERROR" },
-  DISCONNECTED: { icon: Unplug, ring: "border-line", text: "text-ink-2", bg: "bg-white/[0.02]", label: "DISCONNECTED" },
+  DISCONNECTED: { icon: Unplug, ring: "border-line", text: "text-ink-2", bg: "bg-ink/[0.02]", label: "DISCONNECTED" },
   INITIALIZING: { icon: Loader2, ring: "border-cyan/30", text: "text-cyan", bg: "bg-cyan/[0.06]", label: "INITIALIZING" },
   "BACKEND OFFLINE": { icon: Unplug, ring: "border-crit/30", text: "text-crit", bg: "bg-crit/[0.05]", label: "BACKEND OFFLINE" },
 };

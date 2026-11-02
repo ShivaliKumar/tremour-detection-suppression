@@ -35,7 +35,7 @@ export function FrequencySpectrum({
           <span className="size-2.5 rounded-sm bg-s3" /> In-band bins
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="size-2.5 rounded-sm bg-[#334155]" /> Out-of-band bins
+          <span className="size-2.5 rounded-sm bg-[#d6d2c4]" /> Out-of-band bins
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3.5 border-t border-dashed border-ink-2" /> Min peak power {powerThreshold}
@@ -48,9 +48,9 @@ export function FrequencySpectrum({
           <ReferenceArea
             x1={lowcut}
             x2={highcut}
-            fill="#14b8a6"
+            fill="#c6613f"
             fillOpacity={0.06}
-            stroke="#14b8a6"
+            stroke="#c6613f"
             strokeOpacity={0.25}
             strokeDasharray="3 3"
           />
@@ -61,24 +61,24 @@ export function FrequencySpectrum({
             stroke={AXIS}
             tickLine={false}
             ticks={[0, lowcut, highcut, ...[20, 30, 40, 50].filter((v) => v > highcut && v <= (freqs[freqs.length - 1] ?? 50))]}
-            label={{ value: "Frequency (Hz)", position: "insideBottom", offset: -8, fill: "#64748b", fontSize: 11 }}
+            label={{ value: "Frequency (Hz)", position: "insideBottom", offset: -8, fill: "#87867f", fontSize: 11 }}
           />
           <YAxis domain={[0, maxM]} width={48} stroke={AXIS} tickLine={false} axisLine={false} tickFormatter={(v) => v.toFixed(1)} />
           <ReferenceLine
             y={powerThreshold}
-            stroke="#94a3b8"
+            stroke="#87867f"
             strokeDasharray="4 4"
           />
           {peakFrequency !== null && (
             <ReferenceLine
               x={peakFrequency}
-              stroke={peakIsNoise ? "#64748b" : "#e2e8f0"}
+              stroke={peakIsNoise ? "#87867f" : "#141413"}
               strokeOpacity={0.6}
               strokeDasharray={peakIsNoise ? "2 3" : undefined}
               label={{
                 value: peakIsNoise ? `Noise peak ${peakFrequency.toFixed(1)} Hz` : `Peak ${peakFrequency.toFixed(1)} Hz`,
                 position: "top",
-                fill: peakIsNoise ? "#64748b" : "#e2e8f0",
+                fill: peakIsNoise ? "#87867f" : "#141413",
                 fontSize: 10,
               }}
             />
@@ -88,7 +88,7 @@ export function FrequencySpectrum({
             cursor={{ fill: "rgba(255,255,255,0.04)" }}
             content={({ active, payload }: any) =>
               active && payload?.length ? (
-                <div className="rounded-lg border border-line bg-[#0d1626]/95 px-3 py-2 text-xs shadow-xl">
+                <div className="rounded-lg border border-line bg-panel/95 px-3 py-2 text-xs shadow-lg shadow-black/5">
                   <div className="text-ink-3 tabular">
                     {payload[0].payload.f.toFixed(2)} Hz (bin ±{(binWidth / 2).toFixed(2)})
                   </div>
@@ -99,7 +99,7 @@ export function FrequencySpectrum({
           />
           <Bar dataKey="m" isAnimationActive={false} radius={[3, 3, 0, 0]}>
             {rows.map((r) => (
-              <Cell key={r.f} fill={r.f >= lowcut && r.f <= highcut ? SERIES.s3 : "#334155"} />
+              <Cell key={r.f} fill={r.f >= lowcut && r.f <= highcut ? SERIES.s3 : "#d6d2c4"} />
             ))}
           </Bar>
         </BarChart>

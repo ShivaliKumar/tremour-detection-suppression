@@ -2,34 +2,35 @@
 
 @theme {
   --font-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, "Cascadia Mono", "Consolas", monospace;
 
-  /* surfaces */
-  --color-bg: #0b1220;
-  --color-panel: #111c2e;
-  --color-panel-2: #0e1727;
-  --color-raised: #16233a;
-  --color-line: #263449;
-  --color-line-soft: #1b2739;
+  /* surfaces: claude.ai warm paper */
+  --color-bg: #faf9f5;
+  --color-panel: #ffffff;
+  --color-panel-2: #f5f4ed;
+  --color-raised: #f0eee6;
+  --color-line: #e3e0d4;
+  --color-line-soft: #ece9df;
 
   /* ink */
-  --color-ink: #e2e8f0;
-  --color-ink-2: #94a3b8;
-  --color-ink-3: #64748b;
+  --color-ink: #141413;
+  --color-ink-2: #5e5d59;
+  --color-ink-3: #87867f;
 
-  /* brand */
-  --color-teal: #14b8a6;
-  --color-cyan: #38bdf8;
+  /* brand: Claude clay (token name kept so existing classes keep working) */
+  --color-teal: #c6613f;
+  --color-cyan: #4e7fb0;
 
   /* status (reserved: always paired with icon + label) */
-  --color-ok: #34d399;
-  --color-warn: #f59e0b;
-  --color-crit: #ef4444;
+  --color-ok: #4f7a3a;
+  --color-warn: #a8680f;
+  --color-crit: #b3372f;
 
-  /* chart series (validated against #111c2e) */
-  --color-s1: #3987e5;
-  --color-s2: #d95926;
-  --color-s3: #199e70;
+  /* chart series */
+  --color-s1: #4e7fb0;
+  --color-s2: #d97757;
+  --color-s3: #5f7a44;
 }
 
 html,
@@ -42,7 +43,6 @@ body {
   background: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
 }
 
@@ -53,7 +53,7 @@ body {
 /* scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #263449 transparent;
+  scrollbar-color: #d6d2c4 transparent;
 }
 
 /* recharts text */
@@ -70,9 +70,9 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 @keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgb(239 68 68 / 0.45); }
-  70% { box-shadow: 0 0 0 10px rgb(239 68 68 / 0); }
-  100% { box-shadow: 0 0 0 0 rgb(239 68 68 / 0); }
+  0% { box-shadow: 0 0 0 0 rgb(179 55 47 / 0.45); }
+  70% { box-shadow: 0 0 0 10px rgb(179 55 47 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(179 55 47 / 0); }
 }
 .pulse-crit {
   animation: pulse-ring 1.6s ease-out infinite;
@@ -80,3 +80,6 @@ input[type="number"]::-webkit-inner-spin-button {
 @media (prefers-reduced-motion: reduce) {
   .pulse-crit { animation: none; }
 }
+
+h1, h2, .font-serif { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.01em; }
+::selection { background: rgb(217 119 87 / 0.3); }

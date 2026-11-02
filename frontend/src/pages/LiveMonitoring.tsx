@@ -29,7 +29,7 @@ export default function LiveMonitoring() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,320px)_1fr]">
+      <div className="grid gap-4">
         <StatusIndicator state={state} detail={t.link === "closed" ? "Backend offline" : s?.system.detail} />
         <DetectionPipeline status={s} settings={set} />
       </div>

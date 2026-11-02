@@ -25,6 +25,7 @@ from config import (ALLOWED_BAUD_RATES, DEFAULTS, ESP32_FAILSAFE_S, EXPORTED_DIR
                     PROCESSED_DIR, RAW_DIR, SettingsError, SettingsStore)
 from engine import Engine
 from serial_manager import SCENARIOS, list_ports
+from train_model import ALGORITHMS, TrainingError, sklearn_available, train as train_model
 from websocket_manager import WebSocketManager
 
 store = SettingsStore()
@@ -362,15 +363,40 @@ def download_export(name: str):
 
 
 # ======================================================================= ML
+def _ml_payload():
+    return {**engine.ml.status(), "trainer": {"available": sklearn_available(), "algorithms": ALGORITHMS}}
+
+
 @app.get("/api/ml/status")
 def ml_status():
-    return engine.ml.status()
+    return _ml_payload()
+
+
+class TrainBody(BaseModel):
+    algorithm: str = "random_forest"
+    include_simulated: bool = False
+    test_size: float = 0.3
+
+
+@app.post("/api/ml/train")
+async def ml_train(body: TrainBody):
+    if body.algorithm not in ALGORITHMS:
+        raise HTTPException(status_code=422, detail=f"algorithm must be one of {list(ALGORITHMS)}")
+    if not 0.1 <= body.test_size <= 0.5:
+        raise HTTPException(status_code=422, detail="test_size must be between 0.1 and 0.5")
+    try:
+        meta = await asyncio.to_thread(train_model, body.algorithm, body.include_simulated, body.test_size)
+    except TrainingError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    engine.ml.load()
+    engine.event("ok", f"Trained {meta['name']} (accuracy {meta['metrics']['accuracy']:.1%} on held-out sessions)")
+    return _ml_payload()
 
 
 @app.post("/api/ml/reload")
 def ml_reload():
     engine.ml.load()
-    return engine.ml.status()
+    return _ml_payload()
 
 
 # ======================================================================= websocket

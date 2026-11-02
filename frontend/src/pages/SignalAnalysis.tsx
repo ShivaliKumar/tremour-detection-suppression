@@ -284,22 +284,22 @@ function Comparison() {
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={specRows} margin={{ top: 6, right: 8, bottom: 14, left: 0 }}>
                       <CartesianGrid stroke={GRID} vertical={false} />
-                      <ReferenceArea x1={s?.lowcut ?? 4} x2={s?.highcut ?? 12} fill="#14b8a6" fillOpacity={0.06} stroke="none" />
+                      <ReferenceArea x1={s?.lowcut ?? 4} x2={s?.highcut ?? 12} fill="#c6613f" fillOpacity={0.06} stroke="none" />
                       <XAxis
                         dataKey="f"
                         type="number"
                         domain={[0, "dataMax"]}
                         stroke={AXIS}
                         tickLine={false}
-                        label={{ value: "Frequency (Hz)", position: "insideBottom", offset: -8, fill: "#64748b", fontSize: 11 }}
+                        label={{ value: "Frequency (Hz)", position: "insideBottom", offset: -8, fill: "#87867f", fontSize: 11 }}
                       />
                       <YAxis width={44} stroke={AXIS} tickLine={false} axisLine={false} tickFormatter={(v) => v.toFixed(1)} />
                       <Tooltip
                         isAnimationActive={false}
-                        cursor={{ stroke: "#475569" }}
+                        cursor={{ stroke: "#b0aea5" }}
                         content={({ active, payload, label }: any) =>
                           active && payload?.length ? (
-                            <div className="rounded-lg border border-line bg-[#0d1626]/95 px-3 py-2 text-xs shadow-xl">
+                            <div className="rounded-lg border border-line bg-panel/95 px-3 py-2 text-xs shadow-lg shadow-black/5">
                               <div className="mb-1 text-ink-3 tabular">{Number(label).toFixed(2)} Hz</div>
                               {series.map((se) => {
                                 const pt = payload.find((q: any) => q.dataKey === se.key);

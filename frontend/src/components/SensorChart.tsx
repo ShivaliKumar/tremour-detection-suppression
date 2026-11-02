@@ -13,13 +13,13 @@ import {
 import type { Sample } from "../types";
 
 export const SERIES = {
-  s1: "#3987e5", // blue
-  s2: "#d95926", // orange
-  s3: "#199e70", // aqua (detection axis / primary signal)
-  muted: "#64748b",
+  s1: "#4e7fb0", // blue
+  s2: "#d97757", // orange
+  s3: "#5f7a44", // aqua (detection axis / primary signal)
+  muted: "#87867f",
 };
-export const GRID = "#1b2739";
-export const AXIS = "#263449";
+export const GRID = "#ece9df";
+export const AXIS = "#d6d2c4";
 
 export interface Series {
   key: string;
@@ -60,7 +60,7 @@ function ChartTooltip({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-line bg-[#0d1626]/95 px-3 py-2 text-xs shadow-xl backdrop-blur">
+    <div className="rounded-lg border border-line bg-panel/95 px-3 py-2 text-xs shadow-lg shadow-black/5 backdrop-blur">
       <div className="mb-1 text-ink-3 tabular">{xFormat(Number(label))}</div>
       {series.map((s) => {
         const p = payload.find((q) => q.dataKey === s.key);
@@ -167,22 +167,22 @@ function SensorChartImpl({
               allowDataOverflow
             />
             {band && (
-              <ReferenceArea y1={band.y1} y2={band.y2} fill="#14b8a6" fillOpacity={0.05} stroke="none" ifOverflow="hidden" />
+              <ReferenceArea y1={band.y1} y2={band.y2} fill="#c6613f" fillOpacity={0.05} stroke="none" ifOverflow="hidden" />
             )}
             {refLines.map((r) => (
               <ReferenceLine
                 key={r.label}
                 y={r.y}
-                stroke="#94a3b8"
+                stroke="#87867f"
                 strokeDasharray="4 4"
                 strokeOpacity={0.7}
                 ifOverflow="hidden"
-                label={{ value: r.label, position: "insideTopRight", fill: "#94a3b8", fontSize: 10 }}
+                label={{ value: r.label, position: "insideTopRight", fill: "#87867f", fontSize: 10 }}
               />
             ))}
             <Tooltip
               isAnimationActive={false}
-              cursor={{ stroke: "#475569", strokeWidth: 1 }}
+              cursor={{ stroke: "#b0aea5", strokeWidth: 1 }}
               content={(p: any) => <ChartTooltip {...p} series={series} format={format} xFormat={xFormat} />}
             />
             {series.map((s) => (
@@ -194,7 +194,7 @@ function SensorChartImpl({
                 strokeWidth={s.width ?? 1.5}
                 strokeDasharray={s.dashed ? "5 3" : undefined}
                 dot={false}
-                activeDot={{ r: 4, strokeWidth: 2, stroke: "#111c2e" }}
+                activeDot={{ r: 4, strokeWidth: 2, stroke: "#ffffff" }}
                 isAnimationActive={false}
                 connectNulls={false}
               />

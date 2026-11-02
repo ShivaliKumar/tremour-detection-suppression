@@ -23,9 +23,9 @@ function Gate({
   const on = tone === "crit" ? "border-crit/50 bg-crit/[0.08]" : "border-teal/45 bg-teal/[0.07]";
   const onText = tone === "crit" ? "text-crit" : "text-teal";
   return (
-    <div className={cx("flex min-w-0 flex-1 flex-col rounded-xl border p-4 transition-colors", active ? on : "border-line bg-panel")}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3">
+    <div className={cx("flex min-w-0 flex-col rounded-xl border p-4 transition-colors", active ? on : "border-line bg-panel")}>
+      <div className="flex flex-col items-start gap-1">
+        <span className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3">
           <Icon className="size-3.5" /> {title}
         </span>
         <span className={cx("text-[11px] font-bold tracking-wider", active ? onText : "text-ink-3")}>
@@ -53,28 +53,29 @@ export function DetectionPipeline({ status, settings }: { status: Status | null;
   const s = settings;
   const engaged = !!status?.servo.engaged;
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+    <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,0.8fr)_auto_minmax(0,0.8fr)]">
       <Gate title="sEMG gate" icon={Zap} active={!!d?.emg_active} activeLabel="ACTIVE" idleLabel="INACTIVE">
-        <div className="mb-2 flex items-baseline justify-between text-xs">
+        <div className="mb-2 flex items-baseline justify-between gap-2 text-xs">
           <span className="text-ink-3">Counter</span>
-          <span className="text-ink tabular">
-            <span className="text-base font-semibold">{d?.emg_counter ?? 0}</span> / {s?.emg_counter_max ?? 10}
-            <span className="ml-1.5 text-ink-3">need ≥ {s?.emg_confirmation ?? 2}</span>
+          <span className="tabular whitespace-nowrap text-ink-3">
+            <span className="text-base font-semibold text-ink">{d?.emg_counter ?? 0}</span> / {s?.emg_counter_max ?? 10}
           </span>
         </div>
         <CounterBar value={d?.emg_counter ?? 0} max={s?.emg_counter_max ?? 10} threshold={s?.emg_confirmation ?? 2} active={!!d?.emg_active} />
-        <div className="mt-2.5 text-xs text-ink-3">
+        <div className="mt-2.5 space-y-0.5 text-xs text-ink-3">
+          <div>Confirms at ≥ {s?.emg_confirmation ?? 2}</div>
+          <div>
           Avg (last {s?.emg_avg_samples ?? 10}) <span className="text-ink tabular">{fmt(p?.emg_avg, 0)}</span>
           <span className="mx-1.5">·</span>↑ &gt;{s?.emg_threshold_high ?? 1500} ↓ &lt;{s?.emg_threshold_low ?? 500}
+          </div>
         </div>
       </Gate>
       <Connector label="AND" />
       <Gate title="MPU gate" icon={Waves} active={!!d?.mpu_active} activeLabel="ACTIVE" idleLabel="INACTIVE">
-        <div className="mb-2 flex items-baseline justify-between text-xs">
+        <div className="mb-2 flex items-baseline justify-between gap-2 text-xs">
           <span className="text-ink-3">Counter</span>
-          <span className="text-ink tabular">
-            <span className="text-base font-semibold">{d?.tremor_counter ?? 0}</span> / {s?.mpu_counter_max ?? 10}
-            <span className="ml-1.5 text-ink-3">need ≥ {s?.confirmation_threshold ?? 2}</span>
+          <span className="tabular whitespace-nowrap text-ink-3">
+            <span className="text-base font-semibold text-ink">{d?.tremor_counter ?? 0}</span> / {s?.mpu_counter_max ?? 10}
           </span>
         </div>
         <CounterBar
@@ -83,7 +84,9 @@ export function DetectionPipeline({ status, settings }: { status: Status | null;
           threshold={s?.confirmation_threshold ?? 2}
           active={!!d?.mpu_active}
         />
-        <div className="mt-2.5 flex flex-wrap gap-x-3 text-xs text-ink-3">
+        <div className="mt-2.5 text-xs text-ink-3">
+        <div className="mb-0.5">Confirms at ≥ {s?.confirmation_threshold ?? 2}</div>
+        <div className="flex flex-wrap gap-x-3">
           <Cond ok={(p?.rms ?? 0) > (s?.min_movement_rms ?? 0.02)} label={`RMS ${fmt(p?.rms, 3)}`} />
           {isNoisePeak(p?.rms, s?.min_movement_rms) ? (
             <span className="text-ink-3" title="RMS is below the movement threshold, so the FFT peak is sensor noise">
@@ -96,6 +99,7 @@ export function DetectionPipeline({ status, settings }: { status: Status | null;
             />
           )}
           <Cond ok={(p?.peak_power ?? 0) > (s?.min_peak_power ?? 0.5)} label={`Power ${fmt(p?.peak_power, 2)}`} />
+        </div>
         </div>
       </Gate>
       <Connector />

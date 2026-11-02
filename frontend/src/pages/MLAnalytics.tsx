@@ -1,12 +1,75 @@
 import { useEffect, useMemo, useState } from "react";
-import { BrainCircuit, CheckCircle2, CircleDashed, Database, Grid3x3, ListOrdered, RefreshCw, Target, Terminal } from "lucide-react";
+import { BrainCircuit, CheckCircle2, CircleDashed, Database, Grid3x3, ListOrdered, Play, RefreshCw, Target, Terminal } from "lucide-react";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { useSessions } from "../hooks/useSessions";
-import { api } from "../lib/api";
+import { api, ApiError } from "../lib/api";
 import { cx, fmt } from "../lib/format";
 import type { MLStatus } from "../types";
 import { ConfusionMatrix } from "../components/ConfusionMatrix";
 import { Badge, Button, Callout, Card, EmptyState } from "../components/ui";
+
+function TrainPanel({ ml, onDone }: { ml: MLStatus | null; onDone: (s: MLStatus) => void }) {
+  const [algorithm, setAlgorithm] = useState("random_forest");
+  const [sim, setSim] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const algos = ml?.trainer?.algorithms ?? {};
+  const ready = ml?.trainer?.available;
+
+  const run = async () => {
+    setRunning(true);
+    setError(null);
+    try {
+      onDone(await api.post<MLStatus>("/api/ml/train", { algorithm, include_simulated: sim }));
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "Training failed");
+    } finally {
+      setRunning(false);
+    }
+  };
+
+  return (
+    <Card
+      title="Train a baseline model"
+      subtitle="Fits a classifier on your recorded sessions and tests it on sessions it has never seen"
+      icon={Play}
+    >
+      {ready === false && (
+        <div className="mb-4">
+          <Callout tone="warn" title="scikit-learn is not installed">
+            Run <code>pip install scikit-learn pandas joblib</code> in the backend virtualenv, then restart the backend.
+          </Callout>
+        </div>
+      )}
+      <div className="flex flex-wrap items-end gap-4">
+        <label className="block">
+          <span className="mb-1 block text-xs text-ink-3">Algorithm</span>
+          <select
+            value={algorithm}
+            onChange={(e) => setAlgorithm(e.target.value)}
+            disabled={running}
+            className="h-9 min-w-52 rounded-lg border border-line bg-panel px-3 text-[13px] text-ink focus-visible:outline-2 focus-visible:outline-teal"
+          >
+            {Object.entries(algos).map(([id, name]) => (
+              <option key={id} value={id}>{name}</option>
+            ))}
+          </select>
+        </label>
+        <label className="flex h-9 cursor-pointer items-center gap-2 text-[13px] text-ink-2">
+          <input type="checkbox" checked={sim} onChange={(e) => setSim(e.target.checked)} disabled={running} className="size-4 accent-[#c6613f]" />
+          Include simulated sessions (demo only)
+        </label>
+        <Button variant="primary" icon={Play} onClick={run} disabled={running || ready === false}>
+          {running ? "Training…" : "Train model"}
+        </Button>
+      </div>
+      <p className="mt-3 text-xs text-ink-3">
+        Features: EMG average, movement RMS, peak frequency, peak power, magnitude. Labels are the ones you assigned during recording. Training replaces the current model.
+      </p>
+      {error && <div className="mt-3"><Callout tone="crit">{error}</Callout></div>}
+    </Card>
+  );
+}
 
 const pct = (v: number | undefined) => (v === undefined ? "—" : `${(v * 100).toFixed(1)}%`);
 
@@ -51,6 +114,8 @@ export default function MLAnalytics() {
   if (!ml?.available || !meta) {
     return (
       <div className="space-y-6">
+        <TrainPanel ml={ml} onDone={setMl} />
+
         <Card
           title="Model status"
           icon={BrainCircuit}
@@ -70,8 +135,8 @@ export default function MLAnalytics() {
           <ol className="mx-auto mt-2 grid max-w-4xl gap-3 md:grid-cols-3">
             {[
               { icon: Database, title: "1 · Record labelled sessions", body: "Use Data Acquisition. Aim for several hardware sessions per label so whole sessions can be held out for testing." },
-              { icon: Terminal, title: "2 · Train", body: <><code className="text-ink-2">cd backend</code><br /><code className="text-ink-2">pip install scikit-learn pandas joblib</code><br /><code className="text-ink-2">python train_model.py</code></> },
-              { icon: RefreshCw, title: "3 · Reload", body: <>Writes <code className="text-ink-2">models/trained_model.pkl</code> and <code className="text-ink-2">model_metadata.json</code>. Then press Reload model.</> },
+              { icon: Terminal, title: "2 · Train", body: <>Use the panel above, or from a shell: <code className="text-ink-2">python train_model.py</code></> },
+              { icon: RefreshCw, title: "3 · Review", body: <>The model is saved to <code className="text-ink-2">models/</code> and loaded automatically. Metrics appear here.</> },
             ].map(({ icon: Icon, title, body }) => (
               <li key={title} className="rounded-lg border border-line-soft bg-panel-2 p-4">
                 <div className="flex items-center gap-2 text-[13px] font-medium text-ink">
@@ -123,6 +188,12 @@ export default function MLAnalytics() {
 
   return (
     <div className="space-y-6">
+      {meta.includes_simulated && (
+        <Callout tone="warn" title="Trained with simulated data">
+          These metrics describe the simulator, not real tremor. Retrain on hardware sessions before drawing conclusions.
+        </Callout>
+      )}
+      {meta.warnings?.map((w) => <Callout key={w} tone="warn">{w}</Callout>)}
       <div className="grid gap-6 xl:grid-cols-3">
         <Card
           title={meta.name}
@@ -212,13 +283,13 @@ export default function MLAnalytics() {
         <Card title="Confusion matrix" subtitle="Held-out test data · rows = actual, columns = predicted" icon={Grid3x3}>
           {m?.confusion_matrix ? <ConfusionMatrix classes={meta.classes} matrix={m.confusion_matrix} /> : <div className="text-xs text-ink-3">Not provided.</div>}
         </Card>
-        <Card title="Feature importance" subtitle="Impurity-based importance reported by the model" icon={ListOrdered}>
+        <Card title="Feature importance" subtitle="Share of the model's decisions each feature drives (permutation-based for non-tree models)" icon={ListOrdered}>
           {fi.length ? (
             <ul className="space-y-2.5">
               {fi.map(([k, v]) => (
                 <li key={k} className="grid grid-cols-[140px_1fr_52px] items-center gap-3 text-xs">
                   <span className="truncate font-mono text-ink-2">{k}</span>
-                  <div className="h-2.5 rounded-sm bg-white/[0.04]">
+                  <div className="h-2.5 rounded-sm bg-ink/[0.04]">
                     <div className="h-full rounded-sm bg-s1" style={{ width: `${(v / fiMax) * 100}%` }} />
                   </div>
                   <span className="text-right text-ink tabular">{fmt(v, 3)}</span>
@@ -230,6 +301,7 @@ export default function MLAnalytics() {
           )}
         </Card>
       </div>
+      <TrainPanel ml={ml} onDone={setMl} />
       {meta.test_sessions && meta.test_sessions.length < 2 && (
         <Callout tone="warn">The test set contains fewer than two sessions. These metrics may not generalise.</Callout>
       )}

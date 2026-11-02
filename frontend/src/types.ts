@@ -245,7 +245,11 @@ export interface MLStatus {
   metadata_file: string;
   error: string | null;
   prediction: MLPrediction | null;
+  trainer?: { available: boolean; algorithms: Record<string, string> };
   metadata: null | {
+    algorithm?: string;
+    includes_simulated?: boolean;
+    warnings?: string[];
     name: string;
     version: string;
     trained_at: string;

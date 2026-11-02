@@ -42,3 +42,4 @@ desktop.ini
 *.log
 .env
 .env.*
+.gstack/

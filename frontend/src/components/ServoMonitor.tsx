@@ -79,7 +79,7 @@ export function ServoMonitor({ servo, now, compact = false }: { servo: ServoStat
             {fmt(servo?.hold_remaining ?? 0, 1)} / {fmt(servo?.hold_seconds ?? 2, 1)} s
           </span>
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+        <div className="h-1.5 overflow-hidden rounded-full bg-ink/[0.05]">
           <div className="h-full rounded-full bg-crit/80 transition-[width] duration-150" style={{ width: `${holdPct}%` }} />
         </div>
       </div>

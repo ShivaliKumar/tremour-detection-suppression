@@ -20,13 +20,13 @@ export function Card({
   bodyClassName?: string;
 }) {
   return (
-    <section className={cx("rounded-xl border border-line bg-panel", className)}>
+    <section className={cx("rounded-2xl border border-line bg-panel shadow-[0_1px_2px_rgb(20_20_19/0.04)]", className)}>
       {(title || actions) && (
         <header className="flex flex-wrap items-start justify-between gap-3 border-b border-line-soft px-5 py-3.5">
           <div className="flex min-w-0 items-start gap-2.5">
             {Icon && <Icon className="mt-0.5 size-4 shrink-0 text-teal" strokeWidth={2} />}
             <div className="min-w-0">
-              <h2 className="text-[13px] font-semibold tracking-wide text-ink">{title}</h2>
+              <h2 className="text-[15px] text-ink">{title}</h2>
               {subtitle && <p className="mt-0.5 text-xs text-ink-3">{subtitle}</p>}
             </div>
           </div>
@@ -46,7 +46,7 @@ const toneClasses: Record<Tone, string> = {
   crit: "text-crit bg-crit/10 border-crit/30",
   info: "text-cyan bg-cyan/10 border-cyan/25",
   teal: "text-teal bg-teal/10 border-teal/25",
-  neutral: "text-ink-2 bg-white/[0.03] border-line",
+  neutral: "text-ink-2 bg-ink/[0.03] border-line",
 };
 
 const toneIcon: Record<Tone, LucideIcon> = {
@@ -87,11 +87,11 @@ export function Badge({
 type ButtonVariant = "primary" | "secondary" | "danger" | "ghost" | "warn";
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-teal text-[#04231f] hover:bg-teal/90 border-transparent",
-  secondary: "bg-raised text-ink border-line hover:border-ink-3/60 hover:bg-[#1a2943]",
+  primary: "bg-teal text-white hover:bg-[#b55636] border-transparent",
+  secondary: "bg-panel text-ink border-line hover:bg-raised",
   danger: "bg-crit/15 text-crit border-crit/35 hover:bg-crit/25",
   warn: "bg-warn/15 text-warn border-warn/35 hover:bg-warn/25",
-  ghost: "bg-transparent text-ink-2 border-transparent hover:bg-white/[0.04] hover:text-ink",
+  ghost: "bg-transparent text-ink-2 border-transparent hover:bg-ink/[0.04] hover:text-ink",
 };
 
 export function Button({
@@ -236,7 +236,7 @@ export function CounterBar({ value, max, threshold, active }: { value: number; m
             <div
               className={cx(
                 "h-full rounded-[3px] transition-colors duration-150",
-                filled ? (active ? "bg-teal" : "bg-ink-3") : "bg-white/[0.05]",
+                filled ? (active ? "bg-teal" : "bg-ink-3") : "bg-ink/[0.05]",
               )}
             />
           </div>
